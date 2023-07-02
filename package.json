@@ -1,0 +1,32 @@
+{
+  "name": "jnj-dev-cli-ts",
+  "version": "0.0.1",
+  "description": "JnJ Node(Typescript) Utilities For Dev CLI(Command Line Interface)",
+  "bin": {
+    "hello": "./bin/index.js",
+    "github": "./bin/github.js",
+    "bootapp": "./bin/bootapp.js",
+    "spider": "./bin/spider.js"
+  },
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "keywords": [],
+  "author": "Jnj Soft Ko <jnjsoft.ko@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.3.1"
+  },
+  "dependencies": {
+    "@octokit/rest": "^19.0.13",
+    "axios": "^1.4.0",
+    "child_process": "^1.0.2",
+    "dotenv": "^16.3.1",
+    "module": "^1.2.5",
+    "yargs": "13.2"
+  },
+  "type": "module",
+  "main": "dist/index.js"
+}

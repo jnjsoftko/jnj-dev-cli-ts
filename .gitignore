@@ -1,0 +1,17 @@
+# modules
+node_modules/
+
+# binary
+*.exe
+
+# folders
+dist/
+_*/
+bin/
+
+# secrets
+.env
+
+# build
+*.js
+*.js.map

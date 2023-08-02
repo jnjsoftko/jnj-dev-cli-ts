@@ -1,21 +1,18 @@
 #!/usr/bin/env node
+// & IMPORT
+//&============================================================================
 import yargs from "yargs";
 import { execSync } from "child_process";
 import Path from "path";
-import {
-  sleep,
-  mkdir,
-  cpdir,
-  loadJson,
-  saveJson,
-  saveFile,
-  Github,
-  findGithubAccount,
-} from "jnj-lib-base";
+import { sleep, mkdir, cpdir, loadJson, saveJson, saveFile, Github, findGithubAccount } from "jnj-lib-base";
+import { loadIni, saveIni } from "jnj-lib-doc";
 import dotenv from "dotenv";
+
+// & CONSTS / VARIABLES
+//&============================================================================
+
 dotenv.config(); // 실행 경로에 있는 `.env`
-const templatesPath =
-  process.env.ENV_TEMPLATES_PATH ?? "C:/JnJ-soft/Developments/_Templates";
+const templatesPath = process.env.ENV_TEMPLATES_PATH ?? "C:/JnJ-soft/Developments/_Templates";
 
 // * cli options
 const options = yargs
@@ -28,6 +25,7 @@ const options = yargs
     demandOption: true,
   })
   .option("l", {
+    // - lang: language(node|python|go|flutter|)
     alias: "lang",
     default: "node",
     describe: "developemnt language",
@@ -57,17 +55,33 @@ const options = yargs
     type: "string",
   }).argv;
 
-// * init github
+// & FUNCTIONS
+//&============================================================================
+/**
+ * Init github
+ * @param options
+ *  - userName: github user name
+ *  - repoName: repository name
+ *  - description: project(repository) description
+ *
+ * @example
+ * initGithub({userName: '', repoName: ''})
+ */
 const initGithub = (options) => {
-  const { userName, repoName, lang, description } = options;
-  // const github = new Github(userName);
-  // github.initRepo({ name: repoName, description });
+  const { userName, repoName, description } = options;
   const cmd = `github -u ${userName} -e initRepo -n ${repoName} -d "${description}"`;
   execSync(cmd);
-  // console.log('initGithub', { name: repoName, description });
 };
 
-// * package.json 업데이트
+/**
+ * Upadte package.json
+ * @param userName: github user name
+ * @param repoName: repository name
+ * @param json: loadJson(`package.json`)
+ *
+ * @example
+ * updatePackageJsonForGithub(userName: '', repoName: '', json: loadJson(`package.json`))
+ */
 const updatePackageJsonForGithub = (userName, repoName, json) => {
   json = {
     ...json,
@@ -85,8 +99,16 @@ const updatePackageJsonForGithub = (userName, repoName, json) => {
   return json;
 };
 
-// ** init app
-// * Nodejs
+/**
+ * Init Nodejs
+ * @param options
+ *  - userName: github user name
+ *  - repoName: repository name
+ *  - description: project(repository) description
+ *
+ * @example
+ * initGithub({userName: '', repoName: ''})
+ */
 const initNode = (options) => {
   const { userName, repoName, description, template, github } = options;
   const { fullName, email } = findGithubAccount(userName);
@@ -145,8 +167,56 @@ const initNode = (options) => {
   }
 };
 
-// ** main
+/**
+ * Init Python
+ * @param options
+ *  - userName: github user name
+ *  - repoName: repository name
+ *  - description: project(repository) description
+ *
+ * @example
+ * initGithub({userName: '', repoName: ''})
+ */
+const initPython = (options) => {
+  const { userName, repoName, description, template, github } = options;
+  const { fullName, email } = findGithubAccount(userName);
 
+  // * template 폴더 복사
+  const srcDir = Path.join(templatesPath!, `python/${template}`);
+  const dstDir = Path.join(process.cwd(), `${repoName}`);
+
+  cpdir(srcDir, dstDir);
+
+  //* setup.cfg 업데이트
+  const path = Path.join(process.cwd(), `${repoName}/setup.cfg`);
+  let cfg = loadIni(path);
+  cfg = {
+    ...cfg,
+    ...{
+      name: repoName,
+      version: "0.0.1",
+      description: description,
+      author: `${fullName} <${email}>`,
+    },
+  }; // version, description, main, author 업데이트
+
+  // * github
+  if (github) {
+    updatePackageJsonForGithub(userName, repoName, cfg);
+  }
+
+  // ** setup.json 저장
+  saveIni(path, cfg);
+
+  // * pipenv / pip install
+  // execSync(`cd ${dstDir} && npm install`);
+};
+
+// & MAIN
+//&============================================================================
+
+// ** Init app
+//-----------------------------------------------------------------------------
 // * init github
 if (options.github) {
   console.log("## init github");
@@ -158,6 +228,9 @@ if (options.github) {
 switch (options.lang.toUpperCase()) {
   case "NODE":
     initNode(options);
+    break;
+  case "PYTHON":
+    initPython(options);
     break;
 }
 

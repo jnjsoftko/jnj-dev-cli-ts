@@ -1,5 +1,6 @@
-# modules
-node_modules/
+.DS_Store
+__MACOSX
+node_modules
 
 # binary
 *.exe
@@ -8,9 +9,12 @@ node_modules/
 dist/
 _*/
 bin/
+/build
 
 # secrets
 .env
+.env.*
+!.env.example
 
 # build
 *.js

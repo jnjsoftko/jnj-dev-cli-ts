@@ -4,7 +4,7 @@
 import yargs from "yargs";
 import { execSync } from "child_process";
 import Path from "path";
-import { sleep, mkdir, cpdir, loadJson, saveJson, saveFile, Github, findGithubAccount } from "jnj-lib-base";
+import { sleep, mkdir, cpdir, loadJson, saveJson, loadFile, saveFile, Github, findGithubAccount } from "jnj-lib-base";
 import { loadIni, saveIni } from "jnj-lib-doc";
 import dotenv from "dotenv";
 
@@ -141,7 +141,7 @@ const initNode = (options) => {
   saveJson(path, json);
 
   // * npm install
-  execSync(`cd ${dstDir} && npm install`);
+  execSync(`cd "${dstDir}" && npm install`);
 
   // * figma
   // * typescript 인 경우
@@ -189,27 +189,31 @@ const initPython = (options) => {
 
   //* setup.cfg 업데이트
   const path = Path.join(process.cwd(), `${repoName}/setup.cfg`);
-  let cfg = loadIni(path);
-  cfg = {
-    ...cfg,
-    ...{
-      name: repoName,
-      version: "0.0.1",
-      description: description,
-      author: `${fullName} <${email}>`,
-    },
-  }; // version, description, main, author 업데이트
+  const data = { name: repoName, description: description, author: `${fullName} <${email}>` };
 
-  // * github
-  if (github) {
-    updatePackageJsonForGithub(userName, repoName, cfg);
+  const replacements = { " ": "_0_", "<": "_1_", ">": "_2_" }; // ? Error 유발 문자 치환
+
+  let _datas = [];
+  for (let [key, val] of Object.entries(data)) {
+    // * 치환(제한 문자 Error)
+    for (let [k, v] of Object.entries(replacements)) {
+      val = val.replaceAll(k, v);
+    }
+    _datas.push(`'${key}':'${val}'`);
   }
+  const _data = "{" + _datas.join(",") + "}";
+  // console.log(_data);
+  execSync(`config.exe -a update_cfg -s ${path} -D ${_data}`);
 
-  // ** setup.json 저장
-  saveIni(path, cfg);
-
-  // * pipenv / pip install
-  // execSync(`cd ${dstDir} && npm install`);
+  // 역치환
+  // let str = fs.readFileSync(path, { encoding: "utf-8" });
+  let str = loadFile(path);
+  // console.log(str);
+  for (let [k, v] of Object.entries(replacements)) {
+    str = str.replaceAll(v, k);
+  }
+  saveFile(path, str);
+  // fs.writeFileSync(path, str, "utf-8");
 };
 
 // & MAIN

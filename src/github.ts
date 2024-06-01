@@ -15,7 +15,7 @@ const options = yargs
   .option("e", {
     alias: "exec",
     default: "createRepo",
-    describe: "exec command",
+    describe: "exec command createRepo/inintRepo(create+clone+config)/copyRepo(clone+config)/deleteRepo",
     type: "string",
     demandOption: true,
   })
@@ -44,6 +44,12 @@ switch (options.exec) {
     break;
   case "createRepo":
     github.createRepo({
+      name: options.repoName,
+      description: options.description,
+    });
+    break;
+  case "copyRepo":
+    github.copyRepo({
       name: options.repoName,
       description: options.description,
     });

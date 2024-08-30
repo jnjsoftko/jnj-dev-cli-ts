@@ -55,10 +55,15 @@ switch (options.exec) {
     });
     break;
   case "pushRepo":
-    github.pushRepo({
+    github.createRepo({
       name: options.repoName,
       description: options.description,
+      auto_init: false,
+      gitignore_template: null,
+      license_template: null,
     });
+
+    // github.pushRepo(options);
     break;
   case "deleteRepo":
     github.deleteRepo({ owner: options.userName, repo: options.repoName });

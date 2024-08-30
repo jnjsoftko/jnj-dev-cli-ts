@@ -23,7 +23,7 @@
     "axios": "^1.4.0",
     "child_process": "^1.0.2",
     "dotenv": "^16.3.1",
-    "jnj-lib-base": "^0.0.38",
+    "jnj-lib-base": "^0.0.40",
     "jnj-lib-doc": "^0.0.4",
     "module": "^1.2.5",
     "yargs": "13.2"

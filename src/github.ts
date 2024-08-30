@@ -55,10 +55,10 @@ switch (options.exec) {
     });
     break;
   case "pushRepo":
-    github.pushRepo(
+    github.pushRepo({
       name: options.repoName,
       description: options.description,
-    );
+    });
     break;
   case "deleteRepo":
     github.deleteRepo({ owner: options.userName, repo: options.repoName });

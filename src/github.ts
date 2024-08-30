@@ -54,7 +54,7 @@ switch (options.exec) {
       description: options.description,
     });
     break;
-  case "pushRepo":
+  case "emptyRepo":
     github.createRepo({
       name: options.repoName,
       description: options.description,
@@ -63,6 +63,8 @@ switch (options.exec) {
       license_template: null,
     });
 
+    break;
+  case "pushRepo":
     github.pushRepo(options);
     break;
   case "deleteRepo":

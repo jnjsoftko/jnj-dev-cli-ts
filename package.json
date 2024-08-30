@@ -1,6 +1,6 @@
 {
   "name": "jnj-dev-cli",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "JnJ Node(Typescript) Utilities For Dev CLI(Command Line Interface)",
   "bin": {
     "bootapp": "./bin/bootapp.js",

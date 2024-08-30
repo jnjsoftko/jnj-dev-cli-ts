@@ -64,3 +64,5 @@ switch (options.exec) {
     github.deleteRepo({ owner: options.userName, repo: options.repoName });
     break;
 }
+
+// github -u mooninlearn -n udemy-test -e pushRepo -d "test pushRepo"

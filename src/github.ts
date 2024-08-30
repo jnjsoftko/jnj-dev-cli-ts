@@ -63,7 +63,7 @@ switch (options.exec) {
       license_template: null,
     });
 
-    // github.pushRepo(options);
+    github.pushRepo(options);
     break;
   case "deleteRepo":
     github.deleteRepo({ owner: options.userName, repo: options.repoName });

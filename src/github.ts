@@ -64,7 +64,7 @@ switch (options.exec) {
     });
 
     break;
-  case "pushRepo":
+  case "pushRepo": // only push
     console.log("name: ", options.repoName);
     github.pushRepo({
       name: options.repoName,

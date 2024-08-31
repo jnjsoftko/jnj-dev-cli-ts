@@ -66,8 +66,8 @@ switch (options.exec) {
 
     break;
   case "pushRepo": // only push
-    const { name, description, userName } = options;
-    let cmd = `github -u ${userName} -n ${name} -e emptyRepo -d "${description}"`;
+    const { repoName, description, userName } = options;
+    let cmd = `github -u ${userName} -n ${repoName} -e emptyRepo -d "${description}"`;
     console.log(cmd);
     execSync(cmd);
 

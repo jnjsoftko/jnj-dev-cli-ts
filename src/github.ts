@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Github } from "jnj-lib-base";
 import yargs from "yargs";
+import { execSync } from "child_process";
 
 // * cli options
 const options = yargs
@@ -65,17 +66,26 @@ switch (options.exec) {
 
     break;
   case "pushRepo": // only push
-    github.createRepo({
-      name: options.repoName,
-      description: options.description,
-      auto_init: false,
-      gitignore_template: null,
-      license_template: null,
-    });
+    const { name, description, userName } = options;
+    let cmd = `github -u ${userName} -n ${name} -e emptyRepo -d "${description}"`;
+    console.log(cmd);
+    execSync(cmd);
+
     github.pushRepo({
       name: options.repoName,
       description: options.description,
     });
+    // github.createRepo({
+    //   name: options.repoName,
+    //   description: options.description,
+    //   auto_init: false,
+    //   gitignore_template: null,
+    //   license_template: null,
+    // });
+    // github.pushRepo({
+    //   name: options.repoName,
+    //   description: options.description,
+    // });
     break;
   case "deleteRepo":
     github.deleteRepo({ owner: options.userName, repo: options.repoName });

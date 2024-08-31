@@ -65,7 +65,13 @@ switch (options.exec) {
 
     break;
   case "pushRepo": // only push
-    console.log("name: ", options.repoName);
+    github.createRepo({
+      name: options.repoName,
+      description: options.description,
+      auto_init: false,
+      gitignore_template: null,
+      license_template: null,
+    });
     github.pushRepo({
       name: options.repoName,
       description: options.description,

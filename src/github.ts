@@ -75,17 +75,7 @@ switch (options.exec) {
       name: options.repoName,
       description: options.description,
     });
-    // github.createRepo({
-    //   name: options.repoName,
-    //   description: options.description,
-    //   auto_init: false,
-    //   gitignore_template: null,
-    //   license_template: null,
-    // });
-    // github.pushRepo({
-    //   name: options.repoName,
-    //   description: options.description,
-    // });
+
     break;
   case "deleteRepo":
     github.deleteRepo({ owner: options.userName, repo: options.repoName });
